@@ -19,3 +19,15 @@ async def fc_etudiant_by_id(id: PydanticObjectId) -> Edutiant:
 
     if etudiant:
         return etudiant
+
+
+async def fc_maj(id: PydanticObjectId, data: dict) -> Union[bool, Edutiant]:
+    des_body = {k: v for k, v in data.items() if v is not None}
+    update_query = {"$set": {
+        field: value for field, value in des_body.items()
+    }}
+    student = await Edutiant.get(id)
+    if student:
+        await student.update(update_query)
+        return student
+    return False

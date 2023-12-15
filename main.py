@@ -7,7 +7,7 @@ from database import *
 from beanie import PydanticObjectId
 from bson import ObjectId
 
-router = APIRouter(tags=['Etudiant'], prefix='/etudiant')
+router = APIRouter()
 
 
 @asynccontextmanager
@@ -52,7 +52,7 @@ async def tout_les_etudiants():
 @app.get("/v1/etudiant/{id}", response_description="recuperation d'un etudiant par id", response_model=Response)
 async def etudiant_by_id(id):
     etudiant = await fc_etudiant_by_id(id)
-    print(etudiant)
+
     if not etudiant:
         raise HTTPException(
             status_code=404,
@@ -69,3 +69,25 @@ async def etudiant_by_id(id):
             "description": "Operation reussie",
             "data": etudiant
         }
+
+
+# modifions un etudiant par l'ID
+
+@app.put('/v1/etudiant/{id}', response_description="mise à jour d'un etudiant", response_model=Response)
+async def update_student(id: PydanticObjectId, req: EdutiantBasemodel = Body(...)):
+    updated_student = await fc_maj(id, req.dict())
+    if updated_student:
+        return {
+            "status_code": 200,
+            "response_type": "success",
+            "description": "Student with ID: {} updated".format(id),
+            "data": updated_student
+        }
+    return {
+        "status_code": 404,
+        "response_type": "error",
+        "description": "An error occurred. Student with ID: {} not found".format(id),
+        "data": False
+    }
+
+# Suppresseions d'un etudiant par l'ID
