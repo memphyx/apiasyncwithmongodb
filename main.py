@@ -7,7 +7,6 @@ from database import *
 from beanie import PydanticObjectId
 from bson import ObjectId
 
-
 router = APIRouter(tags=['Etudiant'], prefix='/etudiant')
 
 
@@ -26,7 +25,7 @@ app = FastAPI(lifespan=lifespan, title="Student", version="0.0.1")
           response_model=Response)
 async def ajout_etudiant(etudiant: Edutiant = Body(...)):
     new_etudiant = await fc_add_etudiant(etudiant)
-
+    print(new_etudiant)
     return {
         "status_code": 200,
         "response_type": "success",
@@ -51,19 +50,22 @@ async def tout_les_etudiants():
 # recuperons un etudiant
 
 @app.get("/v1/etudiant/{id}", response_description="recuperation d'un etudiant par id", response_model=Response)
-async def etudiant_by_id(id: PydanticObjectId):
-    etudiant = fc_etudiant_by_id(id)
+async def etudiant_by_id(id):
+    etudiant = await fc_etudiant_by_id(id)
+    print(etudiant)
+    if not etudiant:
+        raise HTTPException(
+            status_code=404,
+            detail="le ID ne correspond pas a celui d'un etudiant",
 
-    if etudiant:
+        )
+
+    else:
+
         return {
+
             "status_code": 200,
             "response_type": "success",
             "description": "Operation reussie",
             "data": etudiant
         }
-    return {
-        "status_code": 404,
-        "response_type": "success",
-        "description": "id ne correspond pas a celui d'un etudiant",
-
-    }
