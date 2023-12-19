@@ -38,12 +38,20 @@ async def ajout_etudiant(etudiant: Edutiant = Body(...)):
 @app.get("/v1/etudiants", response_description="Tout les etudiants", response_model=Response)
 async def tout_les_etudiants():
     all_etudiants = await fc_all_etudiants()
+    size_data = len(all_etudiants)
+
+    if size_data == 1:
+        return {
+            "description": "Vous n'avez aucune donné",
+        }
 
     return {
         "status_code": 200,
         "response_type": "success",
         "description": "Operation reussie",
-        "data": all_etudiants
+        "size": size_data,
+        "data": all_etudiants,
+
     }
 
 
@@ -90,4 +98,18 @@ async def update_student(id: PydanticObjectId, req: EdutiantBasemodel = Body(...
         "data": False
     }
 
+
 # Suppresseions d'un etudiant par l'ID
+@app.delete('/v1/etudiant/{id}', response_description="suppression dun etudiant", response_model=Response)
+async def del_etudiant(id: PydanticObjectId):
+    etudiant_del_by_id = await fc_del_etu(id)
+    if not etudiant_del_by_id:
+        raise HTTPException(
+            status_code=404, detail="id introuvable"
+        )
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "l'etudiant avec le ID: {} supprimer".format(id),
+        "data": etudiant_del_by_id
+    }

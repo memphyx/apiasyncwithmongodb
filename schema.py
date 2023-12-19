@@ -47,7 +47,9 @@ class Response(BaseModel):
     status_code: int
     response_type: str
     description: str
+    size: Optional[Any]
     data: Optional[Any]
+
 
     class Config:
         json_schema_extra = {
@@ -57,5 +59,6 @@ class Response(BaseModel):
                 "response_type": "success",
                 "description": "Operation réussie",
                 "data": "Sample data",
+                "size": ""
             }
         }
