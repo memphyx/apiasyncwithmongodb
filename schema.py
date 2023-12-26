@@ -9,29 +9,27 @@ from bson import ObjectId
 class Edutiant(Document):
     nom: str
     prenom: str
-    age: int
+    age: int = Field(default=0, ge=0)
     lieu_de_naissance: str
-    email: EmailStr
+    email: EmailStr = Field(unique=True)
     region: str = Field(default="Agneby")
     date_created: datetime = datetime.now()
 
-
-class Config:
-    json_schema_extra = {
-        "example": {
-            "nom": "Agnéro",
-            "prenom": "Moîse",
-            "age": "34",
-            "lieu_de_naissance": "Dabou",
-            "email": "qdvqdc@gmail.com",
-            "region": "lagunes",
-            "date_created": datetime.now()
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "nom": "Agnéro",
+                "prenom": "Moîse",
+                "age": "34",
+                "lieu_de_naissance": "Dabou",
+                "email": "qdvqdc@gmail.com",
+                "region": "lagunes",
+                "date_created": datetime.now()
+            }
         }
-    }
 
-
-class Settings:
-    name = "edutiant"
+    class Settings:
+        name = "Edutiant"
 
 
 class EdutiantBasemodel(BaseModel):
@@ -47,9 +45,7 @@ class Response(BaseModel):
     status_code: int
     response_type: str
     description: str
-    size: Optional[Any]
     data: Optional[Any]
-
 
     class Config:
         json_schema_extra = {
@@ -59,6 +55,25 @@ class Response(BaseModel):
                 "response_type": "success",
                 "description": "Operation réussie",
                 "data": "Sample data",
-                "size": ""
+            }
+        }
+
+
+class Response_all(BaseModel):
+    status_code: int
+    response_type: str
+    description: str
+    size: int
+    data: Optional[Any]
+
+    class Config:
+        json_schema_extra = {
+
+            "example": {
+                "status_code": 200,
+                "response_type": "success",
+                "description": "Operation réussie",
+                "size": "value",
+                "data": "Sample data"
             }
         }

@@ -1,9 +1,16 @@
 from typing import List, Union
-from beanie import PydanticObjectId
 from schema import *
 
 
-# methode d'ajout dun objet
+# methode de verification de la presence d'un email
+async def fc_verif_email(etudiant: Edutiant):
+    check_email = await Edutiant.find_one(Edutiant.email == etudiant.email)
+
+    if check_email:
+        return check_email
+
+
+# methode d'ajout d'un objet
 async def fc_add_etudiant(new_etudiant_add: Edutiant) -> Edutiant:
     etudiant = await new_etudiant_add.create()
     return etudiant
@@ -15,7 +22,7 @@ async def fc_all_etudiants() -> List[Edutiant]:
     return etudiants
 
 
-# methode d'obtention dun etudiant par iD
+# methode d'obtention d'un etudiant par iD
 async def fc_etudiant_by_id(id: PydanticObjectId) -> Edutiant:
     etudiant = await Edutiant.get(id)
 
@@ -23,7 +30,7 @@ async def fc_etudiant_by_id(id: PydanticObjectId) -> Edutiant:
         return etudiant
 
 
-# methode de mise à jour dun objet par ID
+# methode de mise à jour d'un objet par ID
 async def fc_maj(id: PydanticObjectId, data: dict) -> Union[bool, Edutiant]:
     des_body = {k: v for k, v in data.items() if v is not None}
     update_query = {"$set": {
@@ -36,7 +43,7 @@ async def fc_maj(id: PydanticObjectId, data: dict) -> Union[bool, Edutiant]:
     return False
 
 
-# methode de la suppression dun objet par id
+# Methode de la suppression d'un objet par id
 
 async def fc_del_etu(id: PydanticObjectId) -> Edutiant:
     del_etu = await Edutiant.get(id)
