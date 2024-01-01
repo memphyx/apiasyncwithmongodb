@@ -1,7 +1,7 @@
 import beanie
 import motor
 import motor.motor_asyncio
-from schema import Edutiant
+from models.etudiant import Edutiant
 
 
 async def init_db():

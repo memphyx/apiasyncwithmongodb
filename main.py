@@ -22,13 +22,22 @@ app = FastAPI(lifespan=lifespan, title="Student", version="0.0.1")
 @app.post("/v1/etudiant", response_description="Votre etudiant a bien été ajouté dans la base de donnée",
           response_model=Response)
 async def ajout_etudiant(etudiant: Edutiant = Body(...)):
+    # verification de la taille du nom
+    print(len(etudiant.nom.split()))
+    nbre_de_nom = len(etudiant.nom.split())
+    if nbre_de_nom > 1:
+        raise HTTPException(
+            status_code=409, detail="le nom ou le nom doit contenir un mot"
+        )
 
-    verif_email = await fc_verif_email(etudiant)
+    else:
+        # verification de l'existence d'un email
+        verif_email = await fc_verif_email(etudiant)
 
     if verif_email:
-        raise HTTPException(status_code=409, detail="email exist in db")
+        raise HTTPException(status_code=409, detail=f"email {verif_email.email} exist in db ")
     else:
-
+        # enregistrement d'un etudiant
         new_etudiant = await fc_add_etudiant(etudiant)
         return {
             "status_code": 200,
@@ -43,7 +52,7 @@ async def ajout_etudiant(etudiant: Edutiant = Body(...)):
 async def tout_les_etudiants():
     all_etudiants = await fc_all_etudiants()
     size_data = len(all_etudiants)
-
+    print(all_etudiants)
     if size_data == 0:
         return {
             "description": "Vous n'avez aucune donné",

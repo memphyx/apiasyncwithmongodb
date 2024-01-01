@@ -1,9 +1,18 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from enum import Enum
 from beanie import Document, PydanticObjectId
 from typing import Optional, Any
 from bson import ObjectId
+
+
+class ProfessionEnum(str, Enum):
+    ETUDIANT = 'ETUDIANT'
+    FONCTIONNAIRE = 'FONCTIONNAIRE'
+    ELEVE = "ELEVE"
+    STAGIAIRE = 'STAGIAIRE'
+    AUTRE = 'AUTRE'
 
 
 class Edutiant(Document):
@@ -13,6 +22,7 @@ class Edutiant(Document):
     lieu_de_naissance: str
     email: EmailStr = Field(unique=True)
     region: str = Field(default="Agneby")
+    profession: Optional[ProfessionEnum] = Field(default=ProfessionEnum.AUTRE)
     date_created: datetime = datetime.now()
 
     class Config:
@@ -24,6 +34,7 @@ class Edutiant(Document):
                 "lieu_de_naissance": "Dabou",
                 "email": "qdvqdc@gmail.com",
                 "region": "lagunes",
+                'profession': 'STAGIAIRE',
                 "date_created": datetime.now()
             }
         }
@@ -39,6 +50,7 @@ class EdutiantBasemodel(BaseModel):
     lieu_de_naissance: Optional[str]
     email: Optional[EmailStr]
     region: Optional[str] = Field(default="Agneby")
+    profession: Optional[ProfessionEnum] = Field(default=ProfessionEnum.AUTRE)
 
 
 class Response(BaseModel):

@@ -1,5 +1,5 @@
 from typing import List, Union
-from schema import *
+from models.etudiant import *
 
 
 # methode de verification de la presence d'un email
@@ -8,6 +8,12 @@ async def fc_verif_email(etudiant: Edutiant):
 
     if check_email:
         return check_email
+
+
+# methode de verification de la taille du nom
+
+"""async def fc_len_name(etudiant: Edutiant):
+    taille_nom = await Edutiant.find(len(etudiant.nom))"""
 
 
 # methode d'ajout d'un objet
