@@ -23,7 +23,7 @@ app = FastAPI(lifespan=lifespan, title="Student", version="0.0.1")
           response_model=Response)
 async def ajout_etudiant(etudiant: Edutiant = Body(...)):
     # verification de la taille du nom
-    print(len(etudiant.nom.split()))
+    # print(len(etudiant.nom.split()))
     nbre_de_nom = len(etudiant.nom.split())
     if nbre_de_nom > 1:
         raise HTTPException(
@@ -52,7 +52,7 @@ async def ajout_etudiant(etudiant: Edutiant = Body(...)):
 async def tout_les_etudiants():
     all_etudiants = await fc_all_etudiants()
     size_data = len(all_etudiants)
-    print(all_etudiants)
+    # print(all_etudiants)
     if size_data == 0:
         return {
             "description": "Vous n'avez aucune donné",
@@ -69,7 +69,6 @@ async def tout_les_etudiants():
 
 
 # recuperons un etudiant
-
 @app.get("/v1/etudiant/{id}", response_description="recuperation d'un etudiant par id", response_model=Response)
 async def etudiant_by_id(id):
     etudiant = await fc_etudiant_by_id(id)
