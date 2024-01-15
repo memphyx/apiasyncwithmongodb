@@ -22,7 +22,7 @@ class TypePersonneEnum(str, Enum):
     INCONNU = "INCONNU"
 
 
-class Edutiant(Document):
+class Etudiant(Document):
     nom: str
     prenom: str
     age: int = Field(default=0, ge=0)
@@ -51,7 +51,7 @@ class Edutiant(Document):
         return TypePersonneEnum.INCONNU
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
         json_schema_extra = {
             "example": {
                 "nom": "Agnéro",
@@ -68,7 +68,7 @@ class Edutiant(Document):
         }
 
     class Settings:
-        name = "Edutiant"
+        name = "Etudiant"
 
 
 class EdutiantBasemodel(BaseModel):
@@ -81,6 +81,7 @@ class EdutiantBasemodel(BaseModel):
     region: Optional[str] = Field(default="Agneby")
     profession: Optional[ProfessionEnum] = Field(default=ProfessionEnum.AUTRE)
     is_active: bool = Field(default=True)
+    type_personne: Optional[TypePersonneEnum] = Field(default=TypePersonneEnum.INCONNU)
 
 
 class Response(BaseModel):

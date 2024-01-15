@@ -12,7 +12,7 @@ class Admin(Document):
         name = "admin"
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "fullname": "mempyx",
                 "email": "fksfsl@gmail.com",
@@ -23,7 +23,7 @@ class Admin(Document):
 
 class AdminSignin(HTTPBasicCredentials):
     class Config:
-        Schema_extra = {
+        json_schema_extra = {
             "example": {
 
                 "username": "fksfsl@gmail.com",
@@ -38,7 +38,7 @@ class AdminData(BaseModel):
     email: EmailStr
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "fullname": "mempyx",
                 "email": "fksfsl@gmail.com",

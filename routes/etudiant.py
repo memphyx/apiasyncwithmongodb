@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body, APIRouter, HTTPException
+from fastapi import Body, APIRouter, HTTPException
 from fonction import *
 from database import *
 from beanie import PydanticObjectId
@@ -9,7 +9,7 @@ router = APIRouter()
 # Ajoutons un Etudiant dans BD
 @router.post("/v1/etudiant", response_description="Votre etudiant a bien été ajouté dans la base de donnée",
              response_model=Response)
-async def ajout_etudiant(etudiant: Edutiant = Body(...)):
+async def ajout_etudiant(etudiant: Etudiant = Body(...)):
     # verification de la taille du nom
     # print(len(etudiant.nom.split()))
     print("post")
@@ -41,11 +41,13 @@ async def ajout_etudiant(etudiant: Edutiant = Body(...)):
 async def tout_les_etudiants():
     all_etudiants = await fc_all_etudiants()
     size_data = len(all_etudiants)
-    # print(all_etudiants)
+    # print(size_data)
     if size_data == 0:
-        return {
-            "description": "Vous n'avez aucune donné",
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="Vous n'avez aucune donnée actuellement"
+        )
+
     else:
         return {
             "status_code": 200,
