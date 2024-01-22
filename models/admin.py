@@ -1,12 +1,15 @@
 from beanie import Document
 from fastapi.security import HTTPBasicCredentials
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
 
 
 class Admin(Document):
     fullname: str
     email: EmailStr
     password: str
+    is_active: bool = Field(default=True)
+    create_at: datetime = datetime.now()
 
     class collection:
         name = "admin"
@@ -16,7 +19,9 @@ class Admin(Document):
             "example": {
                 "fullname": "mempyx",
                 "email": "fksfsl@gmail.com",
-                "password": "SA88sds"
+                "password": "SA88sds",
+                "is_active": "true",
+                "create_at": datetime.now()
             }
         }
 
@@ -40,7 +45,7 @@ class AdminData(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "fullname": "mempyx",
+                "fullname": "memphyx",
                 "email": "fksfsl@gmail.com",
             }
         }

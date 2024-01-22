@@ -14,31 +14,30 @@ async def ajout_etudiant(etudiant: Etudiant = Body(...)):
     # print(len(etudiant.nom.split()))
     print("post")
     nbre_de_nom = len(etudiant.nom.split())
-   
+
     if nbre_de_nom > 1:
         raise HTTPException(
             status_code=409, detail="le nom doit contenir un mot"
         )
+    # verification de l'existence d'un email
+    elif await fc_verif_email(etudiant):
+        raise HTTPException(
+            status_code=409,
+            detail="l'email existe deja , "
+        )
+    elif await fc_verif_contact(etudiant):
+        raise HTTPException(
+            status_code=409,
+            detail="le contact existe deja"
+        )
 
-    elif:
-        # verification de l'existence d'un email
-        verif_email = await fc_verif_email(etudiant)
-
-    elif verif_email:
-        raise HTTPException(status_code=409, detail=f"email {verif_email.email} exist in db ")
-
-    elif:
-          # verification de l'existence d'un contact
-          verif_email = await fc_verif_contact(etudiant)
-      
     else:
         # enregistrement d'un etudiant
-        new_etudiant = await fc_add_etudiant(etudiant)
         return {
             "status_code": 200,
             "response_type": "success",
             "description": "Operation reussie",
-            "data": new_etudiant,
+            "data": await fc_add_etudiant(etudiant),
         }
 
 

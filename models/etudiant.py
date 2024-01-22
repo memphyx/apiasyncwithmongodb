@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from enum import Enum
 from beanie import Document, PydanticObjectId, Indexed
-from typing import Optional, Any
+from typing import Optional, Any, Annotated
 from bson import ObjectId
 
 
@@ -26,7 +26,7 @@ class Etudiant(Document):
     nom: str
     prenom: str
     age: int = Field(default=0, ge=0)
-    contact: str = Field(default=" ", max_length=10)
+    contact: Annotated[str, Indexed(unique=True)] = Field(default=" ", max_length=10, min_length=10)
     lieu_de_naissance: str
     email: EmailStr = Field(unique=True)
     region: str = Field(default="Agneby")

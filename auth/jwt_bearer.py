@@ -6,8 +6,10 @@ from auth.jwt_handler import decode_jwt
 
 def verify_jwt(jwtoken: str) -> bool:
     isTokenValid: bool = False
+    print(isTokenValid)
 
     payload = decode_jwt(jwtoken)
+    print(payload)
     if payload:
         isTokenValid = True
     return isTokenValid
