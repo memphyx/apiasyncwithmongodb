@@ -16,7 +16,7 @@ async def ajout_etudiant(etudiant: Etudiant = Body(...)):
     nbre_de_nom = len(etudiant.nom.split())
     if nbre_de_nom > 1:
         raise HTTPException(
-            status_code=409, detail="le nom ou le nom doit contenir un mot"
+            status_code=409, detail="le nom doit contenir un mot"
         )
 
     else:
