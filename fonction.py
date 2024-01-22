@@ -16,6 +16,13 @@ async def fc_verif_email(etudiant: Etudiant):
 
     if check_email:
         return check_email
+        
+# methode de verification de la presence d'un contact       
+async def fc_verif_email(etudiant: Etudiant):
+    check_email = await Etudiant.find_one(Etudiant.contact == etudiant.contact)
+
+    if check_email:
+        return check_email
 
 
 # methode de verification de la taille du nom
