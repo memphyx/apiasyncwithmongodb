@@ -18,7 +18,7 @@ async def fc_verif_email(etudiant: Etudiant):
         return check_email
         
 # methode de verification de la presence d'un contact       
-async def fc_verif_email(etudiant: Etudiant):
+async def fc_verif_contact(etudiant: Etudiant):
     check_email = await Etudiant.find_one(Etudiant.contact == etudiant.contact)
 
     if check_email:
